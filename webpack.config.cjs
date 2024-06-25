@@ -11,7 +11,7 @@ const stylesHandler = isProduction
   : "style-loader";
 
 const config = {
-  entry: [path.resolve(__dirname, "./src/index.js")],
+  entry: [path.resolve(__dirname, "./src/index.ts")],
   devtool: "inline-source-map",
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -33,8 +33,9 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/i,
-        loader: "babel-loader",
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/i,
@@ -48,6 +49,9 @@ const config = {
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
     ],
+  },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"],
   },
 };
 
