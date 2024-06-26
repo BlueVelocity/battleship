@@ -1,7 +1,11 @@
 import "./style.css";
+import GameBoard from "./model/modules/GameBoard";
 
-function working(str: string) {
-  console.log(str);
-}
+const board = new GameBoard();
+board.place(2, 5, 5);
 
-working("Typescript is working!");
+board.receiveAttack(5, 5);
+board.receiveAttack(5, 6);
+
+console.log(board);
+console.log(board.allSunk());
