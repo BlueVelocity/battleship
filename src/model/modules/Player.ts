@@ -4,8 +4,8 @@ export default class Player {
   gameBoard: GameBoard;
   computer: boolean;
 
-  constructor(type: boolean) {
+  constructor(isComputer: boolean) {
     this.gameBoard = new GameBoard();
-    this.computer = type;
+    this.computer = isComputer;
   }
 }

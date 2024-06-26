@@ -3,25 +3,25 @@ import Ship from "./Ship";
 const defaultBoardSize = 10;
 
 function createGrid() {
-  const board: any[][] = [];
+  const grid: any[][] = [];
 
   for (let x = 0; x < defaultBoardSize; x++) {
-    board.push([]);
+    grid.push([]);
     for (let y = 0; y < defaultBoardSize; y++) {
-      board[x].push(null);
+      grid[x].push(null);
     }
   }
 
-  return board;
+  return grid;
 }
 
-export default class GameBoard {
-  board: any[][];
-  missed: number[][];
-  hits: number[][];
+export default class GameboardModel {
+  private boardModel: any[][];
+  private missed: number[][];
+  private hits: number[][];
 
   constructor() {
-    this.board = createGrid();
+    this.boardModel = createGrid();
     this.missed = createGrid();
     this.hits = createGrid();
   }
@@ -38,10 +38,22 @@ export default class GameBoard {
       if (orientation === 1) {
         if (y + i >= defaultBoardSize)
           throw new Error("PlacementError: Out of bounds");
+
+        if (this.boardModel[x][y + i] instanceof Ship)
+          throw new Error(
+            `PlacementError: Collides with existing ship at [${x}, ${y + 1}]`,
+          );
+
         positions.push([x, y + i]);
       } else if (orientation === 2) {
         if (x + i >= defaultBoardSize)
           throw new Error("PlacementError: Out of bounds");
+
+        if (this.boardModel[x + 1][y] instanceof Ship)
+          throw new Error(
+            `PlacementError: Collides with existing ship at [${x + 1}, ${y}]`,
+          );
+
         positions.push([x + i, y]);
       } else {
         throw new Error("InputError: Invalid orientation");
@@ -63,14 +75,14 @@ export default class GameBoard {
       orientation,
     );
 
-    positions.forEach((coord) => (this.board[coord[0]][coord[1]] = ship));
+    positions.forEach((coord) => (this.boardModel[coord[0]][coord[1]] = ship));
   }
 
   receiveAttack(x: number, y: number) {
     if (this.missed[x][y] === 1 || this.hits[x][y] === 1) {
       throw new Error("SelectionError: Target already selected");
     } else {
-      const target = this.board[x][y];
+      const target = this.boardModel[x][y];
 
       if (target !== null) {
         target.hit();
@@ -84,12 +96,31 @@ export default class GameBoard {
   allSunk() {
     let result = true;
 
-    this.board.forEach((x) => {
+    this.boardModel.forEach((x) => {
       x.forEach((tile) => {
         if (tile !== null && tile.isSunk() === false) result = false;
       });
     });
 
     return result;
+  }
+
+  get board() {
+    const compiledBoardModel: any[][] = createGrid();
+
+    //ship is 1, hit is 2, missed is 3
+    this.boardModel.forEach((col, x) => {
+      col.forEach((tile, y) => {
+        if (this.hits[x][y] !== null) {
+          compiledBoardModel[x][y] = 2;
+        } else if (this.missed[x][y] !== null) {
+          compiledBoardModel[x][y] = 3;
+        } else if (this.boardModel[x][y] !== null) {
+          compiledBoardModel[x][y] = 1;
+        }
+      });
+    });
+
+    return compiledBoardModel;
   }
 }

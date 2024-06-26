@@ -30,6 +30,13 @@ test("place() returns error if ship is placed out of bounds", () => {
   ).toThrow(Error);
 });
 
+test("place() throws error if ship placement collides with another ship", () => {
+  testBoard.place(1, 0, 1);
+  testBoard.place(1, 1, 0);
+  expect(() => testBoard.place(3, 0, 0)).toThrow(Error);
+  expect(() => testBoard.place(3, 0, 0, 2)).toThrow(Error);
+});
+
 test("place() switches orientation", () => {
   testBoard.place(testShipLength, 0, 0, 2);
   expect(testBoard.board[0][0]).not.toBe(null);
@@ -41,8 +48,8 @@ test("receiveAttack() records ship hit and miss", () => {
   testBoard.place(1, 0, 0);
   testBoard.receiveAttack(0, 0);
   testBoard.receiveAttack(0, 1);
-  expect(testBoard.hits[0][0]).toBe(1);
-  expect(testBoard.missed[0][1]).toBe(1);
+  expect(testBoard.board[0][0]).toBe(2);
+  expect(testBoard.board[0][1]).toBe(3);
 });
 
 test("receiveAttack() throws error if target is already hit or missed", () => {
