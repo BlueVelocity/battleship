@@ -70,7 +70,7 @@ export default class GameboardModel {
 
   // orientation = 1: vertical, orientation = 2: horizontal
   // returns 0 if success, 1 if failure
-  place(length: number, x: number, y: number, orientation: number = 1) {
+  place = (length: number, x: number, y: number, orientation: number = 1) => {
     const ship = new Ship(length);
 
     const positions: number[][] = this.validatePlacement(
@@ -81,9 +81,9 @@ export default class GameboardModel {
     );
 
     positions.forEach((coord) => (this.boardModel[coord[0]][coord[1]] = ship));
-  }
+  };
 
-  receiveAttack(x: number, y: number) {
+  receiveAttack = (x: number, y: number) => {
     if (this.missed[x][y] === 1 || this.hits[x][y] === 1) {
       throw new Error("SelectionError: Target already selected");
     } else {
@@ -96,9 +96,9 @@ export default class GameboardModel {
         this.missed[x][y] = 1;
       }
     }
-  }
+  };
 
-  allSunk() {
+  allSunk = () => {
     let result = true;
 
     this.boardModel.forEach((x) => {
@@ -108,7 +108,7 @@ export default class GameboardModel {
     });
 
     return result;
-  }
+  };
 
   get board() {
     const compiledBoardModel: any[][] = GameboardModel.createGrid();
