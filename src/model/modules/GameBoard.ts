@@ -48,10 +48,13 @@ export default class GameboardModel {
 
         positions.push([x, y + i]);
       } else if (orientation === 2) {
-        if (x + i >= GameboardModel.defaultSize)
+        if (
+          x + i >= GameboardModel.defaultSize ||
+          y >= GameboardModel.defaultSize
+        )
           throw new Error("PlacementError: Out of bounds");
 
-        if (this.boardModel[x + 1][y] instanceof Ship)
+        if (this.boardModel[x + i][y] instanceof Ship)
           throw new Error(
             `PlacementError: Collides with existing ship at [${x + 1}, ${y}]`,
           );
