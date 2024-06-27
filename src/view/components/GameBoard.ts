@@ -3,6 +3,14 @@ import InteractiveElement from "../modules/InteractiveElement";
 export default class GameBoardComponent extends InteractiveElement {
   name: string;
 
+  private styles = {
+    tileEmpty:
+      "flex-auto border border-black bg-blue-500 hover:cursor-pointer transition duration-250 linear active:scale-110",
+    tileShip: "flex-auto border border-black bg-orange-500",
+    tileHit: "flex-auto border border-black bg-red-500",
+    tileMiss: "flex-auto border border-black bg-gray-500",
+  };
+
   constructor(name: string) {
     super("div");
 
@@ -17,9 +25,15 @@ export default class GameBoardComponent extends InteractiveElement {
 
       row.forEach((tile, x) => {
         const domTile = new InteractiveElement("div");
-        domTile.appendClassList(
-          "flex-auto border border-black bg-blue-500 hover:cursor-pointer transition duration-250 linear active:scale-110",
-        );
+        if (grid[x][y] === 1) {
+          domTile.appendClassList(this.styles.tileShip);
+        } else if (grid[x][y] === 2) {
+          domTile.appendClassList(this.styles.tileHit);
+        } else if (grid[x][y] === 3) {
+          domTile.appendClassList(this.styles.tileMiss);
+        } else {
+          domTile.appendClassList(this.styles.tileEmpty);
+        }
         domRow.elem.appendChild(domTile.elem);
       });
 

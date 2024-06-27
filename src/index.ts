@@ -15,14 +15,15 @@ body.appendChild(gameArea.elem);
 
 //Create and display Player 1
 const p1Model = new Player(false);
+p1Model.gameBoard.place(1, 0, 0);
 
-const p1Board = new GameBoardComponent("joe");
+const p1Board = new GameBoardComponent("player");
 gameArea.elem.appendChild(p1Board.elem);
 p1Board.load(p1Model.gameBoard.board);
 
 //Create and display Player 2
 const p2Model = new Player(false);
 
-const p2Board = new GameBoardComponent("joe");
+const p2Board = new GameBoardComponent("computer");
 gameArea.elem.appendChild(p2Board.elem);
 p2Board.load(p2Model.gameBoard.board);
