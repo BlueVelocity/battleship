@@ -1,29 +1,28 @@
 import Ship from "./Ship";
 
-const defaultBoardSize = 10;
-
-function createGrid() {
-  const grid: any[][] = [];
-
-  for (let x = 0; x < defaultBoardSize; x++) {
-    grid.push([]);
-    for (let y = 0; y < defaultBoardSize; y++) {
-      grid[x].push(null);
-    }
-  }
-
-  return grid;
-}
-
 export default class GameboardModel {
   private boardModel: any[][];
   private missed: number[][];
   private hits: number[][];
+  private static defaultSize = 10;
 
   constructor() {
-    this.boardModel = createGrid();
-    this.missed = createGrid();
-    this.hits = createGrid();
+    this.boardModel = GameboardModel.createGrid();
+    this.missed = GameboardModel.createGrid();
+    this.hits = GameboardModel.createGrid();
+  }
+
+  public static createGrid() {
+    const grid: any[][] = [];
+
+    for (let x = 0; x < GameboardModel.defaultSize; x++) {
+      grid.push([]);
+      for (let y = 0; y < GameboardModel.defaultSize; y++) {
+        grid[x].push(null);
+      }
+    }
+
+    return grid;
   }
 
   private validatePlacement(
@@ -36,7 +35,10 @@ export default class GameboardModel {
 
     for (let i = 0; i < length; i++) {
       if (orientation === 1) {
-        if (y + i >= defaultBoardSize)
+        if (
+          y + i >= GameboardModel.defaultSize ||
+          x >= GameboardModel.defaultSize
+        )
           throw new Error("PlacementError: Out of bounds");
 
         if (this.boardModel[x][y + i] instanceof Ship)
@@ -46,7 +48,7 @@ export default class GameboardModel {
 
         positions.push([x, y + i]);
       } else if (orientation === 2) {
-        if (x + i >= defaultBoardSize)
+        if (x + i >= GameboardModel.defaultSize)
           throw new Error("PlacementError: Out of bounds");
 
         if (this.boardModel[x + 1][y] instanceof Ship)
@@ -106,7 +108,7 @@ export default class GameboardModel {
   }
 
   get board() {
-    const compiledBoardModel: any[][] = createGrid();
+    const compiledBoardModel: any[][] = GameboardModel.createGrid();
 
     //ship is 1, hit is 2, missed is 3
     this.boardModel.forEach((col, x) => {
