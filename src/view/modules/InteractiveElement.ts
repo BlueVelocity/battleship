@@ -18,4 +18,44 @@ export default class InteractiveElement {
       this.elem.classList.add(cssClass);
     });
   }
+
+  removeFromClassList(classList: string) {
+    const classes = classList.split(" ");
+
+    classes.forEach((cssClass) => {
+      this.elem.classList.remove(cssClass);
+    });
+  }
+
+  replaceClassList(newList: string) {
+    const currentList = this.elem.classList;
+
+    currentList.forEach((curClass) => {
+      this.elem.classList.remove(curClass);
+    });
+
+    this.appendClassList(newList);
+  }
+
+  hide() {
+    this.appendClassList("hidden");
+  }
+
+  show() {
+    this.removeFromClassList("hidden");
+  }
+
+  fade() {
+    this.appendClassList("opacity-30");
+  }
+
+  unFade() {
+    this.removeFromClassList("opacity-30");
+  }
+
+  clearChildren() {
+    while (this.elem.lastElementChild) {
+      this.elem.removeChild(this.elem.lastElementChild);
+    }
+  }
 }

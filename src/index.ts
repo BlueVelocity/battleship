@@ -8,38 +8,33 @@ import Player from "./model/modules/Player";
 
 const body = document.querySelector("body");
 
+//Create the header
 const header = new HeaderComponent("BATTLESHIP");
 body.appendChild(header.elem);
 
+//Create the game Area
 const gameArea = new GameAreaComponent();
 body.appendChild(gameArea.elem);
 
-const allocatedShipLengths = [2, 3, 3, 4, 5];
-
-//Create and display Player 1
+//Create and display Player 1 board
 const p1Model = new Player(false);
-p1Model.gameBoard.place(2, 0, 2);
-p1Model.gameBoard.place(3, 2, 2);
-p1Model.gameBoard.place(3, 4, 2);
-p1Model.gameBoard.place(4, 6, 2);
-p1Model.gameBoard.place(5, 8, 2);
 
 const p1Board = new GameBoardComponent("player");
 gameArea.elem.appendChild(p1Board.elem);
+p1Model.gameBoard.place(1, 0, 0);
 p1Board.load(p1Model.gameBoard.board);
 
 const p1Interface = new ModelViewInterface(p1Model, p1Board);
 
-p1Interface.placeShipReq(1, 1);
-
-//Create and display Player 2
+//Create and display Player 2 board
 const p2Model = new Player(true);
-p2Model.gameBoard.place(2, 0, 2);
-p2Model.gameBoard.place(3, 2, 2);
-p2Model.gameBoard.place(3, 4, 2);
-p2Model.gameBoard.place(4, 6, 2);
-p2Model.gameBoard.place(5, 8, 2);
 
 const p2Board = new GameBoardComponent("computer");
 gameArea.elem.appendChild(p2Board.elem);
-p2Board.load(p2Model.gameBoard.board);
+p2Model.gameBoard.place(1, 0, 0);
+p2Board.blankLoad();
+
+const p2Interface = new ModelViewInterface(p2Model, p2Board);
+p2Interface.boardComponent.fade();
+
+//Prompt player to place ships
