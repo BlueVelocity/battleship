@@ -2,6 +2,7 @@ import InteractiveElement from "../modules/InteractiveElement";
 
 export default class GameBoardComponent extends InteractiveElement {
   name: string;
+  private tiles: Element[] = [];
 
   private styles = {
     tileEmpty:
@@ -18,6 +19,11 @@ export default class GameBoardComponent extends InteractiveElement {
     this.appendClassList("flex aspect-square h-full flex-col bg-blue-500");
   }
 
+  static getTileCoordinate(tile: Element) {
+    const tileCoordStr: string = tile.getAttribute("data-coord");
+    return tileCoordStr.split(",").map((coord) => Number(coord));
+  }
+
   load(grid: any[][]) {
     grid.forEach((row, y) => {
       const domRow = new InteractiveElement("div");
@@ -25,6 +31,9 @@ export default class GameBoardComponent extends InteractiveElement {
 
       row.forEach((tile, x) => {
         const domTile = new InteractiveElement("div");
+        domTile.elem.setAttribute("data-coord", `${x},${y}`);
+
+        this.tiles.push(domTile.elem);
         if (grid[x][y] === 1) {
           domTile.appendClassList(this.styles.tileShip);
         } else if (grid[x][y] === 2) {
@@ -44,5 +53,9 @@ export default class GameBoardComponent extends InteractiveElement {
   reLoad(grid: any[][]) {
     this.elem.innerHTML = "";
     this.load(grid);
+  }
+
+  get domTiles() {
+    return this.tiles;
   }
 }
