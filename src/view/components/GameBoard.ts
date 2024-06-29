@@ -1,5 +1,4 @@
 import InteractiveElement from "../modules/InteractiveElement";
-import GameboardModel from "../../model/modules/GameBoard";
 
 export default class GameBoardComponent extends InteractiveElement {
   name: string;
@@ -60,6 +59,13 @@ export default class GameBoardComponent extends InteractiveElement {
 
       this.elem.appendChild(domRow.elem);
     });
+
+    // Adds element id (name) below game board
+    const boardOwner = new InteractiveElement("span");
+    boardOwner.appendClassList("relative bg-sky-200");
+    boardOwner.elem.textContent =
+      this.elem.id.charAt(0).toUpperCase() + this.elem.id.slice(1);
+    this.elem.appendChild(boardOwner.elem);
   }
 
   get domTiles() {
