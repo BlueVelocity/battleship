@@ -10,9 +10,16 @@ export default class ModelViewInterface {
     this.boardComponent = boardComponent;
   }
 
-  placeShipReq = (length: number, orientation: number) => {
+  placeShipReq = (
+    length: number,
+    orientation: number,
+    callback: Function,
+    errorCallback: Function,
+  ) => {
+    this.boardComponent.load(this.model.gameBoard.board, false, true);
+
     this.boardComponent.domTiles.forEach((elem: Element) => {
-      const shipPlacey = (event: Event) => {
+      const shipPlacey = () => {
         const tileCoords = GameBoardComponent.getTileCoordinate(elem);
 
         try {
@@ -22,9 +29,12 @@ export default class ModelViewInterface {
             tileCoords[1],
             orientation,
           );
-          this.boardComponent.load(this.model.gameBoard.board);
+          this.boardComponent.load(this.model.gameBoard.board, false, true);
+
+          callback();
         } catch (error) {
-          alert(error);
+          elem.removeEventListener("click", shipPlacey, false);
+          errorCallback(error);
         }
       };
 

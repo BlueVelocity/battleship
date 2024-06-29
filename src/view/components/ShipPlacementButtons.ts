@@ -3,6 +3,7 @@ import InteractiveElement from "../modules/InteractiveElement";
 export default class ShipPlacementButtons extends InteractiveElement {
   elem: Element;
   shipButtons: InteractiveElement[];
+  errorMessage: InteractiveElement;
 
   private static styles = {
     unselected:
@@ -51,11 +52,24 @@ export default class ShipPlacementButtons extends InteractiveElement {
     return currentSelected;
   }
 
+  displayError(placementError: any) {
+    this.errorMessage.visible();
+    this.errorMessage.elem.textContent = placementError.message;
+    setTimeout(() => this.errorMessage.invisible.call(this.errorMessage), 5000);
+  }
+
   constructor() {
     super("div");
 
     this.elem.id = "ship-placement-tools";
     this.appendClassList("flex flex-col items-center");
+
+    this.errorMessage = new InteractiveElement("p");
+    this.errorMessage.elem.id = "ship-placement-error";
+    this.errorMessage.elem.textContent = "Error Message :^)";
+    this.errorMessage.invisible();
+    this.errorMessage.appendClassList("text-red-500");
+    this.elem.appendChild(this.errorMessage.elem);
 
     const placeShipText = new InteractiveElement("span");
     placeShipText.elem.textContent = "Place your ships!";
@@ -70,9 +84,7 @@ export default class ShipPlacementButtons extends InteractiveElement {
       ["Carrier", "5"],
     ]);
 
-    this.shipButtons.forEach((element, i) => {
-      if (i === 0)
-        element.appendClassList(ShipPlacementButtons.styles.selected);
+    this.shipButtons.forEach((element) => {
       this.elem.appendChild(element.elem);
     });
   }

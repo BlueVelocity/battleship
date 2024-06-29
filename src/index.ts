@@ -45,6 +45,21 @@ p2Interface.boardComponent.fade();
 const shipPlacementButtons = new ShipPlacementButtons();
 utilityArea.elem.appendChild(shipPlacementButtons.elem);
 
+shipPlacementButtons.shipButtons.forEach((element) => {
+  element.elem.addEventListener("click", () => {
+    p1Interface.placeShipReq(
+      Number(
+        shipPlacementButtons
+          .getCurrentSelected()
+          .elem.getAttribute("data-ship-length"),
+      ),
+      1,
+      () => shipPlacementButtons.placed.call(shipPlacementButtons),
+      (err: any) =>
+        shipPlacementButtons.displayError.call(shipPlacementButtons, err),
+    );
+  });
+});
 // do {
 
 // } while() {

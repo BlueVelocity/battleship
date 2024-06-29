@@ -45,6 +45,14 @@ export default class InteractiveElement {
     this.removeFromClassList("hidden");
   }
 
+  invisible() {
+    this.appendClassList("opacity-0");
+  }
+
+  visible() {
+    this.removeFromClassList("opacity-0");
+  }
+
   fade() {
     this.appendClassList("opacity-30");
   }
