@@ -5,8 +5,9 @@ export default class ShipPlacementTools extends InteractiveElement {
   shipButtons: InteractiveElement[];
   private static styles = {
     unselected:
-      "border border-black py-0.5 px-1 m-0.5 rounded transition duration-250 linear active:scale-105",
+      "text-sm border border-black py-0.5 px-1 m-0.5 rounded transition duration-250 linear active:scale-105",
     selected: "bg-orange-500",
+    placed: "pointer-events-none",
   };
 
   private static addActivebuttonToggle = (elements: InteractiveElement[]) => {
@@ -24,7 +25,7 @@ export default class ShipPlacementTools extends InteractiveElement {
     const buttons: InteractiveElement[] = labels.map((label: string[]) => {
       const shipButton = new InteractiveElement("button");
       shipButton.appendClassList(this.styles.unselected);
-      shipButton.elem.textContent = label[0];
+      shipButton.elem.textContent = label[0] + " - " + label[1];
       shipButton.elem.setAttribute("data-ship-length", label[1]);
       return shipButton;
     });
@@ -34,6 +35,11 @@ export default class ShipPlacementTools extends InteractiveElement {
     return buttons;
   };
 
+  placed(button: InteractiveElement) {
+    button.removeFromClassList(ShipPlacementTools.styles.selected);
+    button.appendClassList(ShipPlacementTools.styles.placed);
+  }
+
   constructor() {
     super("div");
 
@@ -42,15 +48,15 @@ export default class ShipPlacementTools extends InteractiveElement {
 
     const placeShipText = new InteractiveElement("span");
     placeShipText.elem.textContent = "Place your ships!";
-    placeShipText.appendClassList("mb-2");
+    placeShipText.appendClassList("mb-1");
     this.elem.appendChild(placeShipText.elem);
 
     this.shipButtons = ShipPlacementTools.createShipButtons([
-      ["Destroyer - 2", "2"],
-      ["Submarine - 3", "3"],
-      ["Cruiser - 3", "3"],
-      ["Battleship - 4", "4"],
-      ["Carrier - 5", "5"],
+      ["Destroyer", "2"],
+      ["Submarine", "3"],
+      ["Cruiser", "3"],
+      ["Battleship", "4"],
+      ["Carrier", "5"],
     ]);
 
     this.shipButtons.forEach((element) => {
