@@ -26,7 +26,13 @@ export default class GameBoardComponent extends InteractiveElement {
     return tileCoordStr.split(",").map((coord) => Number(coord));
   }
 
-  load(grid: any[][]) {
+  load(
+    grid: any[][],
+    shipsHidden: boolean = false,
+    selectable: boolean = false,
+  ) {
+    this.clearChildren();
+
     grid.forEach((row, y) => {
       const domRow = new InteractiveElement("div");
       domRow.appendClassList("flex-auto flex");
@@ -36,41 +42,19 @@ export default class GameBoardComponent extends InteractiveElement {
         domTile.elem.setAttribute("data-coord", `${x},${y}`);
 
         this.tiles.push(domTile.elem);
-        if (grid[x][y] === 1) {
+
+        if (grid[x][y] === 1 && shipsHidden === false) {
           domTile.appendClassList(this.styles.tileShip);
         } else if (grid[x][y] === 2) {
           domTile.appendClassList(this.styles.tileHit);
         } else if (grid[x][y] === 3) {
           domTile.appendClassList(this.styles.tileMiss);
-        } else {
+        } else if (selectable === true) {
           domTile.appendClassList(this.styles.tileEmptySelect);
+        } else {
+          domTile.appendClassList(this.styles.tileEmptyNoSelect);
         }
-        domRow.elem.appendChild(domTile.elem);
-      });
 
-      this.elem.appendChild(domRow.elem);
-    });
-  }
-
-  reLoad(grid: any[][]) {
-    this.elem.innerHTML = "";
-    this.clearChildren();
-  }
-
-  blankLoad() {
-    const blankGrid = GameboardModel.createGrid();
-    this.clearChildren();
-
-    blankGrid.forEach((row, y) => {
-      const domRow = new InteractiveElement("div");
-      domRow.appendClassList("flex-auto flex");
-
-      row.forEach((tile, x) => {
-        const domTile = new InteractiveElement("div");
-        domTile.elem.setAttribute("data-coord", `${x},${y}`);
-
-        this.tiles.push(domTile.elem);
-        domTile.appendClassList(this.styles.tileEmptyNoSelect);
         domRow.elem.appendChild(domTile.elem);
       });
 

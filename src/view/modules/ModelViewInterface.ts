@@ -22,7 +22,7 @@ export default class ModelViewInterface {
             tileCoords[1],
             orientation,
           );
-          this.boardComponent.reLoad(this.model.gameBoard.board);
+          this.boardComponent.load(this.model.gameBoard.board);
         } catch (error) {
           alert(error);
         }
@@ -31,4 +31,12 @@ export default class ModelViewInterface {
       elem.addEventListener("click", shipPlacey);
     });
   };
+
+  loadBoard(selectable: boolean = false, shipsHidden: boolean = false) {
+    this.boardComponent.load(
+      this.model.gameBoard.board,
+      shipsHidden,
+      selectable,
+    );
+  }
 }
