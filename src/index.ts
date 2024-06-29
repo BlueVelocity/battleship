@@ -2,20 +2,26 @@ import "./style.css";
 import HeaderComponent from "./view/components/Header";
 import GameAreaComponent from "./view/components/GameArea";
 import GameBoardComponent from "./view/components/GameBoard";
-import ModelViewInterface from "./view/modules/ModelViewInterface";
+import UtilityArea from "./view/components/UtilityArea";
+import ShipPlacementTools from "./view/components/ShipPlacementTools";
 
+import ModelViewInterface from "./view/modules/ModelViewInterface";
 import Player from "./model/modules/Player";
 
 // SETUP FRAME
 const body = document.querySelector("body");
 
-// Create the header
+// Create and display the header
 const header = new HeaderComponent("BATTLESHIP");
 body.appendChild(header.elem);
 
-// Create the game Area
+// Create and display the Game Area
 const gameArea = new GameAreaComponent();
 body.appendChild(gameArea.elem);
+
+// Create and display the Utility Area
+const utilityArea = new UtilityArea();
+body.appendChild(utilityArea.elem);
 
 // CREATE PLAYERS
 // Instantiate player 1, their board, and establish model-view connection
@@ -36,6 +42,8 @@ p2Interface.loadBoard(false, true);
 p2Interface.boardComponent.fade();
 
 // PLACE SHIPS
+const shipPlacementTools = new ShipPlacementTools();
+utilityArea.elem.appendChild(shipPlacementTools.elem);
 // do {
 
 // } while() {
