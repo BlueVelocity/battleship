@@ -1,13 +1,14 @@
 import InteractiveElement from "../modules/InteractiveElement";
 
-export default class ShipPlacementTools extends InteractiveElement {
+export default class ShipPlacementButtons extends InteractiveElement {
   elem: Element;
   shipButtons: InteractiveElement[];
+
   private static styles = {
     unselected:
       "text-sm border border-black py-0.5 px-1 m-0.5 rounded transition duration-250 linear active:scale-105",
     selected: "bg-orange-500",
-    placed: "pointer-events-none",
+    placed: "pointer-events-none bg-gray-500",
   };
 
   private static addActivebuttonToggle = (elements: InteractiveElement[]) => {
@@ -35,9 +36,19 @@ export default class ShipPlacementTools extends InteractiveElement {
     return buttons;
   };
 
-  placed(button: InteractiveElement) {
-    button.removeFromClassList(ShipPlacementTools.styles.selected);
-    button.appendClassList(ShipPlacementTools.styles.placed);
+  placed() {
+    const button = this.getCurrentSelected();
+
+    button.removeFromClassList(ShipPlacementButtons.styles.selected);
+    button.appendClassList(ShipPlacementButtons.styles.placed);
+    button.fade();
+  }
+
+  getCurrentSelected() {
+    const currentSelected = this.shipButtons.find((element) =>
+      element.elem.classList.contains(ShipPlacementButtons.styles.selected),
+    );
+    return currentSelected;
   }
 
   constructor() {
@@ -51,7 +62,7 @@ export default class ShipPlacementTools extends InteractiveElement {
     placeShipText.appendClassList("mb-1");
     this.elem.appendChild(placeShipText.elem);
 
-    this.shipButtons = ShipPlacementTools.createShipButtons([
+    this.shipButtons = ShipPlacementButtons.createShipButtons([
       ["Destroyer", "2"],
       ["Submarine", "3"],
       ["Cruiser", "3"],
@@ -59,7 +70,9 @@ export default class ShipPlacementTools extends InteractiveElement {
       ["Carrier", "5"],
     ]);
 
-    this.shipButtons.forEach((element) => {
+    this.shipButtons.forEach((element, i) => {
+      if (i === 0)
+        element.appendClassList(ShipPlacementButtons.styles.selected);
       this.elem.appendChild(element.elem);
     });
   }

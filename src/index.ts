@@ -3,7 +3,7 @@ import HeaderComponent from "./view/components/Header";
 import GameAreaComponent from "./view/components/GameArea";
 import GameBoardComponent from "./view/components/GameBoard";
 import UtilityArea from "./view/components/UtilityArea";
-import ShipPlacementTools from "./view/components/ShipPlacementTools";
+import ShipPlacementButtons from "./view/components/ShipPlacementButtons";
 
 import ModelViewInterface from "./view/modules/ModelViewInterface";
 import Player from "./model/modules/Player";
@@ -42,8 +42,9 @@ p2Interface.loadBoard(false, true);
 p2Interface.boardComponent.fade();
 
 // PLACE SHIPS
-const shipPlacementTools = new ShipPlacementTools();
-utilityArea.elem.appendChild(shipPlacementTools.elem);
+const shipPlacementButtons = new ShipPlacementButtons();
+utilityArea.elem.appendChild(shipPlacementButtons.elem);
+
 // do {
 
 // } while() {
