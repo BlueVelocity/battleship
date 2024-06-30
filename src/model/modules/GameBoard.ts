@@ -4,6 +4,8 @@ export default class GameboardModel {
   private boardModel: any[][];
   private missed: number[][];
   private hits: number[][];
+  private maxShips: number = 5;
+  private shipCount: number = 0;
   private static defaultSize = 10;
 
   constructor() {
@@ -81,6 +83,10 @@ export default class GameboardModel {
     );
 
     positions.forEach((coord) => (this.boardModel[coord[0]][coord[1]] = ship));
+
+    this.maxShips++;
+    if (this.shipCount >= this.maxShips) return true;
+    return false;
   };
 
   receiveAttack = (x: number, y: number) => {

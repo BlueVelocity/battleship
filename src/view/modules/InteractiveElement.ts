@@ -11,6 +11,10 @@ export default class InteractiveElement {
     }
   }
 
+  appendChildren(...args: InteractiveElement[]) {
+    args.forEach((element) => this.elem.appendChild(element.elem));
+  }
+
   appendClassList(classList: string) {
     const classes = classList.split(" ");
 

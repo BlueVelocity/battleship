@@ -1,18 +1,27 @@
 import InteractiveElement from "../modules/InteractiveElement";
 
 export default class ShipPlacementButtons extends InteractiveElement {
+  static orientation: number = 1;
+  private static maxShips: number = 5;
   elem: Element;
   shipButtons: InteractiveElement[];
-  errorMessage: InteractiveElement;
+  private shipCount: number = 0;
+  private errorMessage: InteractiveElement = new InteractiveElement("p");
+  private placeShipText = new InteractiveElement("span");
+  private rotateButton = new InteractiveElement("button");
+  private shipButtonArea = new InteractiveElement("div");
+  private startButton = new InteractiveElement("button");
 
   private static styles = {
     unselected:
       "text-sm border border-black py-0.5 px-1 m-0.5 rounded transition duration-250 linear active:scale-105",
     selected: "bg-orange-500",
     placed: "pointer-events-none bg-gray-500",
+    buttonArea:
+      "flex-1 grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] grid-rows-1 place-content-center",
   };
 
-  private static addActivebuttonToggle = (elements: InteractiveElement[]) => {
+  private static addActiveButtonToggle = (elements: InteractiveElement[]) => {
     elements.forEach((element) => {
       element.elem.addEventListener("click", () => {
         elements.forEach((btn) =>
@@ -20,6 +29,20 @@ export default class ShipPlacementButtons extends InteractiveElement {
         );
         element.appendClassList(this.styles.selected);
       });
+    });
+  };
+
+  private static toggleRotateButton = (element: InteractiveElement) => {
+    element.elem.addEventListener("click", () => {
+      if (
+        element.elem.classList.contains(ShipPlacementButtons.styles.selected)
+      ) {
+        ShipPlacementButtons.orientation = 1;
+        element.removeFromClassList(ShipPlacementButtons.styles.selected);
+      } else {
+        ShipPlacementButtons.orientation = 2;
+        element.appendClassList(ShipPlacementButtons.styles.selected);
+      }
     });
   };
 
@@ -32,30 +55,13 @@ export default class ShipPlacementButtons extends InteractiveElement {
       return shipButton;
     });
 
-    this.addActivebuttonToggle(buttons);
+    this.addActiveButtonToggle(buttons);
 
     return buttons;
   };
 
-  placed() {
-    const button = this.getCurrentSelected();
-
-    button.removeFromClassList(ShipPlacementButtons.styles.selected);
-    button.appendClassList(ShipPlacementButtons.styles.placed);
-    button.fade();
-  }
-
-  getCurrentSelected() {
-    const currentSelected = this.shipButtons.find((element) =>
-      element.elem.classList.contains(ShipPlacementButtons.styles.selected),
-    );
-    return currentSelected;
-  }
-
-  displayError(placementError: any) {
-    this.errorMessage.visible();
-    this.errorMessage.elem.textContent = placementError.message;
-    setTimeout(() => this.errorMessage.invisible.call(this.errorMessage), 5000);
+  static getOrientation() {
+    return this.orientation;
   }
 
   constructor() {
@@ -64,17 +70,13 @@ export default class ShipPlacementButtons extends InteractiveElement {
     this.elem.id = "ship-placement-tools";
     this.appendClassList("flex flex-col items-center");
 
-    this.errorMessage = new InteractiveElement("p");
     this.errorMessage.elem.id = "ship-placement-error";
     this.errorMessage.elem.textContent = "Error Message :^)";
     this.errorMessage.invisible();
     this.errorMessage.appendClassList("text-red-500");
-    this.elem.appendChild(this.errorMessage.elem);
 
-    const placeShipText = new InteractiveElement("span");
-    placeShipText.elem.textContent = "Place your ships!";
-    placeShipText.appendClassList("mb-1");
-    this.elem.appendChild(placeShipText.elem);
+    this.placeShipText.elem.textContent = "Place your ships!";
+    this.placeShipText.appendClassList("mb-1");
 
     this.shipButtons = ShipPlacementButtons.createShipButtons([
       ["Destroyer", "2"],
@@ -84,8 +86,64 @@ export default class ShipPlacementButtons extends InteractiveElement {
       ["Carrier", "5"],
     ]);
 
+    this.rotateButton.appendClassList(
+      ShipPlacementButtons.styles.unselected + " mb-2",
+    );
+    this.rotateButton.elem.textContent = "ROTATE";
+    ShipPlacementButtons.toggleRotateButton(this.rotateButton);
+
+    this.shipButtonArea.appendClassList(ShipPlacementButtons.styles.buttonArea);
     this.shipButtons.forEach((element) => {
-      this.elem.appendChild(element.elem);
+      this.shipButtonArea.elem.appendChild(element.elem);
+    });
+
+    this.startButton.appendClassList(
+      ShipPlacementButtons.styles.unselected + " bg-green-300 mt-2",
+    );
+    this.startButton.elem.textContent = "START!";
+    this.startButton.hide();
+
+    this.appendChildren(
+      this.errorMessage,
+      this.placeShipText,
+      this.rotateButton,
+      this.shipButtonArea,
+      this.startButton,
+    );
+  }
+
+  getCurrentSelected() {
+    const currentSelected = this.shipButtons.find((element) =>
+      element.elem.classList.contains(ShipPlacementButtons.styles.selected),
+    );
+    return currentSelected;
+  }
+
+  placed() {
+    const button = this.getCurrentSelected();
+
+    button.removeFromClassList(ShipPlacementButtons.styles.selected);
+    button.appendClassList(ShipPlacementButtons.styles.placed);
+    button.fade();
+
+    console.log(this.shipCount, " ", ShipPlacementButtons.maxShips);
+
+    this.shipCount++;
+    if (this.shipCount >= ShipPlacementButtons.maxShips) {
+      this.startButton.show();
+    }
+  }
+
+  displayError(placementError: any) {
+    this.errorMessage.visible();
+    this.errorMessage.elem.textContent = placementError.message;
+    setTimeout(() => this.errorMessage.invisible.call(this.errorMessage), 5000);
+  }
+
+  assignToStart(callback: Function) {
+    this.startButton.elem.addEventListener("click", () => {
+      this.elem.parentNode.removeChild(this.elem.parentNode.firstElementChild);
+      callback();
     });
   }
 }

@@ -1,5 +1,6 @@
 import GameBoardComponent from "../components/GameBoard";
 import Player from "../../model/modules/Player";
+import ShipPlacementButtons from "../components/ShipPlacementButtons";
 
 export default class ModelViewInterface {
   model: Player;
@@ -12,7 +13,6 @@ export default class ModelViewInterface {
 
   placeShipReq = (
     length: number,
-    orientation: number,
     callback: Function,
     errorCallback: Function,
   ) => {
@@ -21,6 +21,8 @@ export default class ModelViewInterface {
     this.boardComponent.domTiles.forEach((elem: Element) => {
       const shipPlacey = () => {
         const tileCoords = GameBoardComponent.getTileCoordinate(elem);
+
+        const orientation = ShipPlacementButtons.getOrientation();
 
         try {
           this.model.gameBoard.place(

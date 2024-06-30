@@ -53,7 +53,6 @@ shipPlacementButtons.shipButtons.forEach((element) => {
           .getCurrentSelected()
           .elem.getAttribute("data-ship-length"),
       ),
-      1,
       () => shipPlacementButtons.placed.call(shipPlacementButtons),
       (err: any) =>
         shipPlacementButtons.displayError.call(shipPlacementButtons, err),
