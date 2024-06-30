@@ -6,7 +6,7 @@ export default class GameBoardComponent extends InteractiveElement {
 
   private styles = {
     tileEmptySelect:
-      "flex-auto border border-black bg-blue-500 hover:cursor-pointer transition duration-250 linear active:scale-110 active:border-red-500",
+      "flex-auto border border-black bg-blue-500 hover:cursor-pointer active:outline-red-500 active:outline-4 active:outline active:z-50 active:rounded hover:bg-blue-700",
     tileEmptyNoSelect: "flex-auto border border-black bg-blue-500",
     tileShip: "flex-auto border border-black bg-orange-500",
     tileHit: "flex-auto border border-black bg-red-500",
