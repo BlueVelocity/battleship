@@ -59,6 +59,16 @@ shipPlacementButtons.shipButtons.forEach((element) => {
     );
   });
 });
+
+// START GAME
+shipPlacementButtons.assignToStart(() => {
+  p1Interface.loadBoard(false, false);
+
+  p2Interface.model.gameBoard.autoPlace();
+  p2Interface.boardComponent.unFade();
+  p2Interface.loadBoard(true, true);
+  p2Interface.underAttack();
+});
 // do {
 
 // } while() {

@@ -126,8 +126,6 @@ export default class ShipPlacementButtons extends InteractiveElement {
     button.appendClassList(ShipPlacementButtons.styles.placed);
     button.fade();
 
-    console.log(this.shipCount, " ", ShipPlacementButtons.maxShips);
-
     this.shipCount++;
     if (this.shipCount >= ShipPlacementButtons.maxShips) {
       this.startButton.show();

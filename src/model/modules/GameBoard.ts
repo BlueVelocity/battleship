@@ -89,6 +89,14 @@ export default class GameboardModel {
     return false;
   };
 
+  autoPlace() {
+    this.place(2, 0, 0, 1);
+    this.place(3, 1, 0, 1);
+    this.place(3, 2, 0, 1);
+    this.place(4, 3, 0, 1);
+    this.place(5, 4, 0, 1);
+  }
+
   receiveAttack = (x: number, y: number) => {
     if (this.missed[x][y] === 1 || this.hits[x][y] === 1) {
       throw new Error("SelectionError: Target already selected");

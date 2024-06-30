@@ -1,6 +1,7 @@
 import GameBoardComponent from "../components/GameBoard";
 import Player from "../../model/modules/Player";
 import ShipPlacementButtons from "../components/ShipPlacementButtons";
+import InteractiveElement from "./InteractiveElement";
 
 export default class ModelViewInterface {
   model: Player;
@@ -50,5 +51,25 @@ export default class ModelViewInterface {
       shipsHidden,
       selectable,
     );
+  }
+
+  assignTileCallback(callback: Function) {
+    this.boardComponent.domTiles.forEach((element) =>
+      element.addEventListener("click", () => callback()),
+    );
+  }
+
+  underAttack() {
+    this.boardComponent.domTiles.forEach((element) => {
+      element.addEventListener("click", () => {
+        const [x, y] = element
+          .getAttribute("data-coord")
+          .split(",")
+          .map((num) => Number(num));
+        this.model.gameBoard.receiveAttack(x, y);
+        this.loadBoard(true, true);
+        this.underAttack();
+      });
+    });
   }
 }
