@@ -125,15 +125,20 @@ export default class GameboardModel {
   get board() {
     const compiledBoardModel: any[][] = GameboardModel.createGrid();
 
-    //ship is 1, hit is 2, missed is 3
+    //ship is 1, hit is 2, missed is 3, sunk ship is 4
     this.boardModel.forEach((col, x) => {
       col.forEach((tile, y) => {
-        if (this.hits[x][y] !== null) {
+        if (this.boardModel[x][y] !== null && this.boardModel[x][y].isSunk()) {
+          compiledBoardModel[x][y] = 4;
+        } else if (
+          this.boardModel[x][y] !== null &&
+          !this.boardModel[x][y].isSunk()
+        ) {
+          compiledBoardModel[x][y] = 1;
+        } else if (this.hits[x][y] !== null) {
           compiledBoardModel[x][y] = 2;
         } else if (this.missed[x][y] !== null) {
           compiledBoardModel[x][y] = 3;
-        } else if (this.boardModel[x][y] !== null) {
-          compiledBoardModel[x][y] = 1;
         }
       });
     });

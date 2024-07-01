@@ -11,6 +11,7 @@ export default class GameBoardComponent extends InteractiveElement {
     tileShip: "flex-auto border border-black bg-orange-500",
     tileHit: "flex-auto border border-black bg-red-500",
     tileMiss: "flex-auto border border-black bg-gray-500",
+    tileSunk: "flex-auto border border-black bg-red-900",
   };
 
   constructor(name: string) {
@@ -48,6 +49,8 @@ export default class GameBoardComponent extends InteractiveElement {
           domTile.appendClassList(this.styles.tileHit);
         } else if (grid[x][y] === 3) {
           domTile.appendClassList(this.styles.tileMiss);
+        } else if (grid[x][y] === 4) {
+          domTile.appendClassList(this.styles.tileSunk);
         } else if (selectable === true) {
           domTile.appendClassList(this.styles.tileEmptySelect);
         } else {
