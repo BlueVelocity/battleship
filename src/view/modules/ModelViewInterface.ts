@@ -5,6 +5,7 @@ import ShipPlacementButtons from "../components/ShipPlacementButtons";
 export default class ModelViewInterface {
   model: Player;
   boardComponent: GameBoardComponent;
+  previousSelections: number[][] = [];
 
   constructor(model: Player, boardComponent: GameBoardComponent) {
     this.model = model;
@@ -20,17 +21,12 @@ export default class ModelViewInterface {
 
     this.boardComponent.domTiles.forEach((elem: Element) => {
       const shipPlacey = () => {
-        const tileCoords = GameBoardComponent.getTileCoordinate(elem);
+        const [x, y] = GameBoardComponent.getTileCoordinate(elem);
 
         const orientation = ShipPlacementButtons.getOrientation();
 
         try {
-          this.model.gameBoard.place(
-            length,
-            tileCoords[0],
-            tileCoords[1],
-            orientation,
-          );
+          this.model.gameBoard.place(length, x, y, orientation);
           this.boardComponent.load(this.model.gameBoard.board, false, true);
 
           callback();
@@ -58,21 +54,31 @@ export default class ModelViewInterface {
     );
   }
 
-  underAttack() {
-    this.boardComponent.domTiles.forEach((element) => {
-      element.addEventListener("click", () => {
-        try {
-          const [x, y] = element
-            .getAttribute("data-coord")
-            .split(",")
-            .map((num) => Number(num));
-          this.model.gameBoard.receiveAttack(x, y);
-          this.loadBoard(true, true);
-          this.underAttack();
-        } catch (err) {
-          console.error(err);
-        }
+  underAttack(opposingInterface: ModelViewInterface) {
+    if (opposingInterface.model.computer === false) {
+      this.boardComponent.domTiles.forEach((element) => {
+        element.addEventListener("click", () => {
+          try {
+            const [x, y] = element
+              .getAttribute("data-coord")
+              .split(",")
+              .map((num) => Number(num));
+
+            this.model.gameBoard.receiveAttack(x, y);
+            this.loadBoard(true, true);
+          } catch (err) {
+            console.error(err);
+          }
+          opposingInterface.underAttack(this);
+        });
       });
-    });
+    } else {
+      const [x, y] = opposingInterface.model.autoAttackSelection();
+
+      this.model.gameBoard.receiveAttack(x, y);
+      this.loadBoard(false, false);
+
+      opposingInterface.underAttack(this);
+    }
   }
 }

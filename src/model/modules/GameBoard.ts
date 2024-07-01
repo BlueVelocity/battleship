@@ -6,7 +6,7 @@ export default class GameboardModel {
   private hits: number[][];
   private maxShips: number = 5;
   private shipCount: number = 0;
-  private static defaultSize = 10;
+  static defaultSize = 10;
 
   constructor() {
     this.boardModel = GameboardModel.createGrid();

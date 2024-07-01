@@ -67,10 +67,10 @@ shipPlacementButtons.assignToStart(() => {
   p2Interface.model.gameBoard.autoPlace();
   p2Interface.boardComponent.unFade();
   p2Interface.loadBoard(true, true);
-  p2Interface.underAttack();
+
+  startGameLoop();
 });
-// do {
 
-// } while() {
-
-// }
+function startGameLoop() {
+  p2Interface.underAttack(p1Interface);
+}
