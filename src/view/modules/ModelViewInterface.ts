@@ -75,10 +75,19 @@ export default class ModelViewInterface {
     } else {
       const [x, y] = opposingInterface.model.autoAttackSelection();
 
-      this.model.gameBoard.receiveAttack(x, y);
-      this.loadBoard(false, false);
+      this.boardComponent.unFade();
+      opposingInterface.boardComponent.fade();
 
-      opposingInterface.underAttack(this);
+      setTimeout(() => {
+        this.model.gameBoard.receiveAttack(x, y);
+        this.loadBoard(false, false);
+      }, 1000);
+
+      setTimeout(() => {
+        this.boardComponent.fade();
+        opposingInterface.boardComponent.unFade();
+        opposingInterface.underAttack(this);
+      }, 2000);
     }
   }
 }
