@@ -55,9 +55,7 @@ export default class GameboardModel {
           throw new Error("PlacementError: Out of bounds");
 
         if (this.boardModel[x + i][y] instanceof Ship)
-          throw new Error(
-            `PlacementError: Collides with existing ship at [${x + 1}, ${y}]`,
-          );
+          throw new Error("PlacementError: Collides with existing ship");
 
         positions.push([x + i, y]);
       } else {

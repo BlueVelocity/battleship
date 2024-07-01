@@ -135,7 +135,7 @@ export default class ShipPlacementButtons extends InteractiveElement {
   displayError(placementError: any) {
     this.errorMessage.visible();
     this.errorMessage.elem.textContent = placementError.message;
-    setTimeout(() => this.errorMessage.invisible.call(this.errorMessage), 5000);
+    setTimeout(() => this.errorMessage.invisible(), 5000);
   }
 
   assignToStart(callback: Function) {
