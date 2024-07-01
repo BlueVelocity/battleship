@@ -65,6 +65,14 @@ export default class InteractiveElement {
     this.removeFromClassList("opacity-30");
   }
 
+  fadeSoft() {
+    this.appendClassList("opacity-60");
+  }
+
+  unFadeSoft() {
+    this.removeFromClassList("opacity-60");
+  }
+
   clearChildren() {
     while (this.elem.lastElementChild) {
       this.elem.removeChild(this.elem.lastElementChild);

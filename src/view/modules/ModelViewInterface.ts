@@ -75,8 +75,8 @@ export default class ModelViewInterface {
     } else {
       const [x, y] = opposingInterface.model.autoAttackSelection();
 
-      this.boardComponent.unFade();
-      opposingInterface.boardComponent.fade();
+      this.boardComponent.unFadeSoft();
+      opposingInterface.boardComponent.fadeSoft();
 
       setTimeout(() => {
         this.model.gameBoard.receiveAttack(x, y);
@@ -84,8 +84,8 @@ export default class ModelViewInterface {
       }, 1000);
 
       setTimeout(() => {
-        this.boardComponent.fade();
-        opposingInterface.boardComponent.unFade();
+        this.boardComponent.fadeSoft();
+        opposingInterface.boardComponent.unFadeSoft();
         opposingInterface.underAttack(this);
       }, 2000);
     }

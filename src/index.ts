@@ -66,7 +66,7 @@ shipPlacementButtons.assignToStart(() => {
 
   p2Interface.model.gameBoard.autoPlace();
   p2Interface.boardComponent.unFade();
-  p1Interface.boardComponent.fade();
+  p1Interface.boardComponent.fadeSoft();
   p2Interface.loadBoard(true, true);
 
   startGameLoop();
