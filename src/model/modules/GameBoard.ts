@@ -128,19 +128,17 @@ export default class GameboardModel {
       col.forEach((tile, y) => {
         if (this.boardModel[x][y] !== null && this.boardModel[x][y].isSunk()) {
           compiledBoardModel[x][y] = 4;
-        } else if (
-          this.boardModel[x][y] !== null &&
-          !this.boardModel[x][y].isSunk()
-        ) {
-          compiledBoardModel[x][y] = 1;
         } else if (this.hits[x][y] !== null) {
           compiledBoardModel[x][y] = 2;
+        } else if (this.boardModel[x][y] !== null) {
+          compiledBoardModel[x][y] = 1;
         } else if (this.missed[x][y] !== null) {
           compiledBoardModel[x][y] = 3;
         }
       });
     });
 
+    console.log(compiledBoardModel);
     return compiledBoardModel;
   }
 }

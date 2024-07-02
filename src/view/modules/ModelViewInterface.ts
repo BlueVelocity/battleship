@@ -69,6 +69,7 @@ export default class ModelViewInterface {
           } catch (err) {
             console.error(err);
           }
+
           opposingInterface.underAttack(this);
         });
       });
