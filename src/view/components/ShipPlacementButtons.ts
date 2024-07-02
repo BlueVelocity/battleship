@@ -1,4 +1,5 @@
 import InteractiveElement from "../modules/InteractiveElement";
+import ModelViewInterface from "../modules/ModelViewInterface";
 
 export default class ShipPlacementButtons extends InteractiveElement {
   static orientation: number = 1;
@@ -66,7 +67,7 @@ export default class ShipPlacementButtons extends InteractiveElement {
     return this.orientation;
   }
 
-  constructor() {
+  constructor(firstPlayer: ModelViewInterface) {
     super("div");
 
     this.elem.id = "ship-placement-tools";
@@ -88,6 +89,20 @@ export default class ShipPlacementButtons extends InteractiveElement {
       ["Carrier", "5"],
     ]);
 
+    this.shipButtons.forEach((element) => {
+      element.elem.addEventListener("click", () => {
+        firstPlayer.placeShipReq(
+          Number(
+            this.getCurrentSelected().elem.getAttribute("data-ship-length"),
+          ),
+          () => this.placed(),
+          (err: any) => this.displayError(err),
+        );
+      });
+
+      this.shipButtonArea.appendChildren(element);
+    });
+
     this.rotateButton.appendClassList(
       ShipPlacementButtons.styles.unselected + " mb-2",
     );
@@ -95,9 +110,6 @@ export default class ShipPlacementButtons extends InteractiveElement {
     ShipPlacementButtons.toggleRotateButton(this.rotateButton);
 
     this.shipButtonArea.appendClassList(ShipPlacementButtons.styles.buttonArea);
-    this.shipButtons.forEach((element) => {
-      this.shipButtonArea.elem.appendChild(element.elem);
-    });
 
     this.startButton.appendClassList(ShipPlacementButtons.styles.startButton);
     this.startButton.elem.textContent = "START!";

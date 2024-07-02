@@ -4,9 +4,11 @@ import GameAreaComponent from "./view/components/GameArea";
 import GameBoardComponent from "./view/components/GameBoard";
 import UtilityArea from "./view/components/UtilityArea";
 import ShipPlacementButtons from "./view/components/ShipPlacementButtons";
+import WinnerScreen from "./view/components/WinnerScreen";
 
 import ModelViewInterface from "./view/modules/ModelViewInterface";
 import Player from "./model/modules/Player";
+import InteractiveElement from "./view/modules/InteractiveElement";
 
 // SETUP FRAME
 const body = document.querySelector("body");
@@ -25,42 +27,32 @@ body.appendChild(utilityArea.elem);
 
 // CREATE PLAYERS
 // Instantiate player 1, their board, and establish model-view connection
-const p1Model = new Player(false);
-const p1Board = new GameBoardComponent("player");
-const p1Interface = new ModelViewInterface(p1Model, p1Board);
+const p1Interface = new ModelViewInterface(
+  new Player("Player", false),
+  new GameBoardComponent("player"),
+);
 
-gameArea.elem.appendChild(p1Board.elem);
+gameArea.appendChildren(p1Interface.boardComponent);
 p1Interface.loadBoard(true);
 
 // Instantiate player 2, their board, and establish model-view connection
-const p2Model = new Player(true);
-const p2Board = new GameBoardComponent("computer");
-const p2Interface = new ModelViewInterface(p2Model, p2Board);
+const p2Interface = new ModelViewInterface(
+  new Player("Computer", true),
+  new GameBoardComponent("computer"),
+);
 
-gameArea.elem.appendChild(p2Board.elem);
+gameArea.appendChildren(p2Interface.boardComponent);
 p2Interface.loadBoard(false, true);
 p2Interface.boardComponent.fade();
 
 // PLACE SHIPS
-const shipPlacementButtons = new ShipPlacementButtons();
-utilityArea.elem.appendChild(shipPlacementButtons.elem);
-
-shipPlacementButtons.shipButtons.forEach((element) => {
-  element.elem.addEventListener("click", () => {
-    p1Interface.placeShipReq(
-      Number(
-        shipPlacementButtons
-          .getCurrentSelected()
-          .elem.getAttribute("data-ship-length"),
-      ),
-      () => shipPlacementButtons.placed(),
-      (err: any) => shipPlacementButtons.displayError(err),
-    );
-  });
-});
+let shipPlacementButtons = new ShipPlacementButtons(p1Interface);
+utilityArea.appendChildren(shipPlacementButtons);
 
 // START GAME
-shipPlacementButtons.assignToStart(() => {
+shipPlacementButtons.assignToStart(() => startGame());
+
+function startGame() {
   p1Interface.loadBoard(false, false);
 
   p2Interface.model.gameBoard.autoPlace();
@@ -69,8 +61,28 @@ shipPlacementButtons.assignToStart(() => {
   p2Interface.loadBoard(true, true);
 
   startGameLoop();
-});
+}
+
+function resetGame() {
+  p1Interface.model = new Player("Player", false);
+  p2Interface.model = new Player("Computer", true);
+
+  p1Interface.loadBoard(true, false);
+  p1Interface.boardComponent.unFadeSoft();
+  p2Interface.loadBoard(false, true);
+  p2Interface.boardComponent.fade();
+
+  utilityArea.clearChildren();
+  shipPlacementButtons = new ShipPlacementButtons(p1Interface);
+  shipPlacementButtons.assignToStart(() => startGame());
+  ShipPlacementButtons.orientation = 1;
+  utilityArea.appendChildren(shipPlacementButtons);
+}
+
+function endGame(winner: ModelViewInterface) {
+  utilityArea.appendChildren(new WinnerScreen(winner.model.name, resetGame));
+}
 
 function startGameLoop() {
-  p2Interface.underAttack(p1Interface);
+  p2Interface.attackLoop(p1Interface, endGame);
 }

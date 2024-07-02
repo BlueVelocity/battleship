@@ -87,10 +87,6 @@ export default class GameboardModel {
 
   autoPlace() {
     this.place(2, 0, 0, 1);
-    this.place(3, 1, 0, 1);
-    this.place(3, 2, 0, 1);
-    this.place(4, 3, 0, 1);
-    this.place(5, 4, 0, 1);
   }
 
   receiveAttack = (x: number, y: number) => {
@@ -138,7 +134,6 @@ export default class GameboardModel {
       });
     });
 
-    console.log(compiledBoardModel);
     return compiledBoardModel;
   }
 }

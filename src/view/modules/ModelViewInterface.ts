@@ -54,7 +54,7 @@ export default class ModelViewInterface {
     );
   }
 
-  underAttack(opposingInterface: ModelViewInterface) {
+  attackLoop(opposingInterface: ModelViewInterface, endGameCallback: Function) {
     if (opposingInterface.model.computer === false) {
       this.boardComponent.domTiles.forEach((element) => {
         element.addEventListener("click", () => {
@@ -70,7 +70,13 @@ export default class ModelViewInterface {
             console.error(err);
           }
 
-          opposingInterface.underAttack(this);
+          if (this.model.gameBoard.allSunk()) {
+            endGameCallback(opposingInterface);
+          } else if (opposingInterface.model.gameBoard.allSunk()) {
+            endGameCallback(this);
+          } else {
+            opposingInterface.attackLoop(this, endGameCallback);
+          }
         });
       });
     } else {
@@ -87,7 +93,14 @@ export default class ModelViewInterface {
       setTimeout(() => {
         this.boardComponent.fadeSoft();
         opposingInterface.boardComponent.unFadeSoft();
-        opposingInterface.underAttack(this);
+
+        if (this.model.gameBoard.allSunk()) {
+          endGameCallback(opposingInterface);
+        } else if (opposingInterface.model.gameBoard.allSunk()) {
+          endGameCallback(this);
+        } else {
+          opposingInterface.attackLoop(this, endGameCallback);
+        }
       }, 2000);
     }
   }

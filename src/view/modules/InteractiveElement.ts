@@ -42,7 +42,7 @@ export default class InteractiveElement {
   }
 
   hide() {
-    this.appendClassList("hidden");
+    if (!this.elem.classList.contains("hidden")) this.appendClassList("hidden");
   }
 
   show() {
@@ -50,7 +50,8 @@ export default class InteractiveElement {
   }
 
   invisible() {
-    this.appendClassList("opacity-0");
+    if (!this.elem.classList.contains("opacity-0"))
+      this.appendClassList("opacity-0");
   }
 
   visible() {
@@ -58,7 +59,8 @@ export default class InteractiveElement {
   }
 
   fade() {
-    this.appendClassList("opacity-30");
+    if (!this.elem.classList.contains("opacity-30"))
+      this.appendClassList("opacity-30");
   }
 
   unFade() {
@@ -66,7 +68,8 @@ export default class InteractiveElement {
   }
 
   fadeSoft() {
-    this.appendClassList("opacity-60");
+    if (!this.elem.classList.contains("opacity-60"))
+      this.appendClassList("opacity-60");
   }
 
   unFadeSoft() {

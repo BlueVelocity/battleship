@@ -3,11 +3,13 @@ import GameBoard from "./GameBoard";
 export default class Player {
   gameBoard: GameBoard;
   computer: boolean;
+  name: string;
   private previousSelections: number[][] = [];
 
-  constructor(isComputer: boolean) {
+  constructor(name: string, isComputer: boolean) {
     this.gameBoard = new GameBoard();
     this.computer = isComputer;
+    this.name = name;
   }
 
   autoAttackSelection() {
