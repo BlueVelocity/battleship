@@ -19,6 +19,8 @@ export default class ShipPlacementButtons extends InteractiveElement {
     placed: "pointer-events-none bg-gray-500",
     buttonArea:
       "flex-1 grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] grid-rows-1 place-content-center",
+    startButton:
+      "text-lg border border-black py-0.5 px-1 m-1 rounded transition duration-250 linear active:scale-105 bg-green-500",
   };
 
   private static addActiveButtonToggle = (elements: InteractiveElement[]) => {
@@ -97,9 +99,7 @@ export default class ShipPlacementButtons extends InteractiveElement {
       this.shipButtonArea.elem.appendChild(element.elem);
     });
 
-    this.startButton.appendClassList(
-      ShipPlacementButtons.styles.unselected + " bg-green-300 mt-2",
-    );
+    this.startButton.appendClassList(ShipPlacementButtons.styles.startButton);
     this.startButton.elem.textContent = "START!";
     this.startButton.hide();
 
@@ -128,6 +128,10 @@ export default class ShipPlacementButtons extends InteractiveElement {
 
     this.shipCount++;
     if (this.shipCount >= ShipPlacementButtons.maxShips) {
+      while (this.elem.childElementCount > 1) {
+        this.elem.removeChild(this.elem.firstElementChild);
+      }
+
       this.startButton.show();
     }
   }
