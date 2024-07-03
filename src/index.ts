@@ -11,19 +11,14 @@ import Player from "./model/modules/Player";
 import InteractiveElement from "./view/modules/InteractiveElement";
 
 // SETUP FRAME
-const body = document.querySelector("body");
+const bodyElement = document.querySelector("body");
+const body = new InteractiveElement(bodyElement);
 
-// Create and display the header
 const header = new HeaderComponent("BATTLESHIP");
-body.appendChild(header.elem);
-
-// Create and display the Game Area
 const gameArea = new GameAreaComponent();
-body.appendChild(gameArea.elem);
-
-// Create and display the Utility Area
 const utilityArea = new UtilityArea();
-body.appendChild(utilityArea.elem);
+
+body.appendChildren(header, gameArea, utilityArea);
 
 // CREATE PLAYERS
 // Instantiate player 1, their board, and establish model-view connection
@@ -32,7 +27,6 @@ const p1Interface = new ModelViewInterface(
   new GameBoardComponent("player"),
 );
 
-gameArea.appendChildren(p1Interface.boardComponent);
 p1Interface.loadBoard(true);
 
 // Instantiate player 2, their board, and establish model-view connection
@@ -41,9 +35,10 @@ const p2Interface = new ModelViewInterface(
   new GameBoardComponent("computer"),
 );
 
-gameArea.appendChildren(p2Interface.boardComponent);
 p2Interface.loadBoard(false, true);
 p2Interface.boardComponent.fade();
+
+gameArea.appendChildren(p1Interface.boardComponent, p2Interface.boardComponent);
 
 // PLACE SHIPS
 let shipPlacementButtons = new ShipPlacementButtons(p1Interface);
@@ -55,12 +50,15 @@ shipPlacementButtons.assignToStart(() => startGame());
 function startGame() {
   p1Interface.loadBoard(false, false);
 
-  p2Interface.model.gameBoard.autoPlace();
+  if (p1Interface.model.computer) p2Interface.model.gameBoard.autoPlace();
+
+  if (p2Interface.model.computer) p2Interface.model.gameBoard.autoPlace();
+
   p2Interface.boardComponent.unFade();
   p1Interface.boardComponent.fadeSoft();
   p2Interface.loadBoard(true, true);
 
-  startGameLoop();
+  p2Interface.attackLoop(p1Interface, endGame);
 }
 
 function resetGame() {
@@ -81,8 +79,4 @@ function resetGame() {
 
 function endGame(winner: ModelViewInterface) {
   utilityArea.appendChildren(new WinnerScreen(winner.model.name, resetGame));
-}
-
-function startGameLoop() {
-  p2Interface.attackLoop(p1Interface, endGame);
 }
