@@ -12,6 +12,26 @@ export default class ModelViewInterface {
     this.boardComponent = boardComponent;
   }
 
+  reset(selectable: boolean, shipsHidden: boolean) {
+    this.model = new Player(this.model.name, this.model.computer);
+    this.boardComponent = new GameBoardComponent();
+    this.loadBoard(selectable, shipsHidden);
+  }
+
+  loadBoard(selectable: boolean = false, shipsHidden: boolean = false) {
+    this.boardComponent.load(
+      this.model.gameBoard.board,
+      shipsHidden,
+      selectable,
+    );
+  }
+
+  assignTileCallback(callback: Function) {
+    this.boardComponent.domTiles.forEach((element) =>
+      element.addEventListener("click", () => callback()),
+    );
+  }
+
   placeShipReq = (
     length: number,
     callback: Function,
@@ -39,20 +59,6 @@ export default class ModelViewInterface {
       elem.addEventListener("click", shipPlacey);
     });
   };
-
-  loadBoard(selectable: boolean = false, shipsHidden: boolean = false) {
-    this.boardComponent.load(
-      this.model.gameBoard.board,
-      shipsHidden,
-      selectable,
-    );
-  }
-
-  assignTileCallback(callback: Function) {
-    this.boardComponent.domTiles.forEach((element) =>
-      element.addEventListener("click", () => callback()),
-    );
-  }
 
   attackLoop(opposingInterface: ModelViewInterface, endGameCallback: Function) {
     if (opposingInterface.model.computer === false) {

@@ -14,10 +14,9 @@ export default class GameBoardComponent extends InteractiveElement {
     tileSunk: "flex-auto border border-black bg-red-900",
   };
 
-  constructor(name: string) {
+  constructor() {
     super("div");
 
-    this.elem.id = name;
     this.appendClassList("flex aspect-square h-full flex-col bg-blue-500");
   }
 
