@@ -4,8 +4,7 @@ export default class GameboardModel {
   private boardModel: any[][];
   private missed: number[][];
   private hits: number[][];
-  private maxShips: number = 5;
-  private shipCount: number = 0;
+  shipLengths: number[] = [5, 4, 3, 3, 2];
   static defaultSize = 10;
 
   constructor() {
@@ -79,14 +78,34 @@ export default class GameboardModel {
     );
 
     positions.forEach((coord) => (this.boardModel[coord[0]][coord[1]] = ship));
-
-    this.maxShips++;
-    if (this.shipCount >= this.maxShips) return true;
-    return false;
   };
 
   autoPlace() {
-    this.place(2, 0, 0, 1);
+    for (let l in this.shipLengths) {
+      let done = false;
+      while (done === false) {
+        const o = Math.round(Math.random() * 2 + 1);
+        let x;
+        let y;
+
+        try {
+          if (o === 1) {
+            x = Math.round((GameboardModel.defaultSize - 1) * Math.random());
+            y = Math.round(
+              (GameboardModel.defaultSize - 1 - length) * Math.random(),
+            );
+          } else {
+            x = Math.round(
+              (GameboardModel.defaultSize - 1 - length) * Math.random(),
+            );
+            y = Math.round((GameboardModel.defaultSize - 1) * Math.random());
+          }
+
+          this.place(this.shipLengths[l], x, y, o);
+          done = true;
+        } catch (err) {}
+      }
+    }
   }
 
   receiveAttack = (x: number, y: number) => {

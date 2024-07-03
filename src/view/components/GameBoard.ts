@@ -14,9 +14,10 @@ export default class GameBoardComponent extends InteractiveElement {
     tileSunk: "flex-auto border border-black bg-red-900",
   };
 
-  constructor() {
+  constructor(name: string) {
     super("div");
 
+    this.name = name;
     this.appendClassList("flex aspect-square h-full flex-col bg-blue-500");
   }
 
@@ -66,7 +67,7 @@ export default class GameBoardComponent extends InteractiveElement {
     const boardOwner = new InteractiveElement("span");
     boardOwner.appendClassList("relative bg-sky-200");
     boardOwner.elem.textContent =
-      this.elem.id.charAt(0).toUpperCase() + this.elem.id.slice(1);
+      this.name[0].toUpperCase() + this.name.slice(1);
     this.elem.appendChild(boardOwner.elem);
   }
 

@@ -7,14 +7,14 @@ export default class ModelViewInterface {
   boardComponent: GameBoardComponent;
   previousSelections: number[][] = [];
 
-  constructor(model: Player, boardComponent: GameBoardComponent) {
-    this.model = model;
-    this.boardComponent = boardComponent;
+  constructor(name: string, isComputer: boolean) {
+    this.model = new Player(name, isComputer);
+    this.boardComponent = new GameBoardComponent(name);
   }
 
   reset(selectable: boolean, shipsHidden: boolean) {
     this.model = new Player(this.model.name, this.model.computer);
-    this.boardComponent = new GameBoardComponent();
+    this.boardComponent = new GameBoardComponent(this.boardComponent.name);
     this.loadBoard(selectable, shipsHidden);
   }
 

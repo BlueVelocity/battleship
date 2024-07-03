@@ -22,17 +22,11 @@ body.appendChildren(header, gameArea, utilityArea);
 
 // CREATE PLAYERS
 // Instantiate player 1, their board, and establish model-view connection
-const p1Interface = new ModelViewInterface(
-  new Player("Player", false),
-  new GameBoardComponent(),
-);
+const p1Interface = new ModelViewInterface("Player", false);
 p1Interface.loadBoard(true);
 
 // Instantiate player 2, their board, and establish model-view connection
-const p2Interface = new ModelViewInterface(
-  new Player("Computer", true),
-  new GameBoardComponent(),
-);
+const p2Interface = new ModelViewInterface("Computer", true);
 p2Interface.loadBoard(false, true);
 p2Interface.boardComponent.fade();
 
