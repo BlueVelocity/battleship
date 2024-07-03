@@ -59,6 +59,14 @@ function resetGame() {
   p2Interface.reset(false, true);
   p2Interface.boardComponent.fade();
 
+  gameArea.clearChildren();
+  p1Interface.loadBoard(true, false);
+  p2Interface.loadBoard(false, true);
+  gameArea.appendChildren(
+    p1Interface.boardComponent,
+    p2Interface.boardComponent,
+  );
+
   utilityArea.clearChildren();
   shipPlacementButtons = new ShipPlacementButtons(p1Interface);
   shipPlacementButtons.assignToStart(() => startGame());
