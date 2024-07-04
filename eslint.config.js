@@ -1,6 +1,6 @@
 export default [
   {
-    files: ["src/**/*.js"],
+    files: ["src/**/*.js", "src/**/*.ts"],
     ignores: ["**/*.config.js", "!**/eslint.config.js"],
     rules: {
       semi: "error",

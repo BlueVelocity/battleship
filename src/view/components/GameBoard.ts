@@ -4,7 +4,7 @@ export default class GameBoardComponent extends InteractiveElement {
   name: string;
   private tiles: Element[] = [];
 
-  private styles = {
+  static styles = {
     tileEmptySelect:
       "flex-auto border border-black bg-blue-500 hover:cursor-pointer active:outline-red-500 active:outline-4 active:outline active:z-50 active:rounded hover:bg-blue-700",
     tileEmptyNoSelect: "flex-auto border border-black bg-blue-500",
@@ -44,17 +44,17 @@ export default class GameBoardComponent extends InteractiveElement {
         this.tiles.push(domTile.elem);
 
         if (grid[x][y] === 1 && shipsHidden === false) {
-          domTile.appendClassList(this.styles.tileShip);
+          domTile.appendClassList(GameBoardComponent.styles.tileShip);
         } else if (grid[x][y] === 2) {
-          domTile.appendClassList(this.styles.tileHit);
+          domTile.appendClassList(GameBoardComponent.styles.tileHit);
         } else if (grid[x][y] === 3) {
-          domTile.appendClassList(this.styles.tileMiss);
+          domTile.appendClassList(GameBoardComponent.styles.tileMiss);
         } else if (grid[x][y] === 4) {
-          domTile.appendClassList(this.styles.tileSunk);
+          domTile.appendClassList(GameBoardComponent.styles.tileSunk);
         } else if (selectable === true) {
-          domTile.appendClassList(this.styles.tileEmptySelect);
+          domTile.appendClassList(GameBoardComponent.styles.tileEmptySelect);
         } else {
-          domTile.appendClassList(this.styles.tileEmptyNoSelect);
+          domTile.appendClassList(GameBoardComponent.styles.tileEmptyNoSelect);
         }
 
         domRow.elem.appendChild(domTile.elem);

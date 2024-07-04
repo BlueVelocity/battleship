@@ -13,7 +13,7 @@ export default class ShipPlacementButtons extends InteractiveElement {
   private shipButtonArea = new InteractiveElement("div");
   private startButton = new InteractiveElement("button");
 
-  private static styles = {
+  static styles = {
     unselected:
       "text-sm border border-black py-0.5 px-1 m-0.5 rounded transition duration-250 linear active:scale-105",
     selected: "bg-orange-500",

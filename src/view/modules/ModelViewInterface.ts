@@ -63,27 +63,31 @@ export default class ModelViewInterface {
   attackLoop(opposingInterface: ModelViewInterface, endGameCallback: Function) {
     if (opposingInterface.model.computer === false) {
       this.boardComponent.domTiles.forEach((element) => {
-        element.addEventListener("click", () => {
-          try {
-            const [x, y] = element
-              .getAttribute("data-coord")
-              .split(",")
-              .map((num) => Number(num));
+        if (
+          element.classList.value === GameBoardComponent.styles.tileEmptySelect
+        ) {
+          element.addEventListener("click", () => {
+            try {
+              const [x, y] = element
+                .getAttribute("data-coord")
+                .split(",")
+                .map((num) => Number(num));
 
-            this.model.gameBoard.receiveAttack(x, y);
-            this.loadBoard(true, true);
-          } catch (err) {
-            console.error(err);
-          }
+              this.model.gameBoard.receiveAttack(x, y);
+              this.loadBoard(true, true);
+            } catch (err) {
+              console.error(err);
+            }
 
-          if (this.model.gameBoard.allSunk()) {
-            endGameCallback(opposingInterface);
-          } else if (opposingInterface.model.gameBoard.allSunk()) {
-            endGameCallback(this);
-          } else {
-            opposingInterface.attackLoop(this, endGameCallback);
-          }
-        });
+            if (this.model.gameBoard.allSunk()) {
+              endGameCallback(opposingInterface);
+            } else if (opposingInterface.model.gameBoard.allSunk()) {
+              endGameCallback(this);
+            } else {
+              opposingInterface.attackLoop(this, endGameCallback);
+            }
+          });
+        }
       });
     } else {
       const [x, y] = opposingInterface.model.autoAttackSelection();
