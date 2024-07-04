@@ -6,6 +6,7 @@
   "private": "true",
   "scripts": {
     "gh-pages": "git subtree push --prefix ./dist/ origin gh-pages",
+    "gh-pages": "git subtree push --prefix ./dist/ origin gh-pages",
     "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
     "watch-test": "node --experimental-vm-modules ./node_modules/.bin/jest --watch",
     "build": "webpack --mode=production --node-env=production",
